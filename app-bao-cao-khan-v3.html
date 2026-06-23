@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FSC HO — Báo cáo khẩn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.17.0/dist/tabler-icons.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+<style>
+:root{
+  --bg:#F7F8FA;--surface:#fff;--surface2:#F7F8FA;--border:#E2E5EA;--line:#EFF1F4;
+  --text:#14161A;--sub:#6B7280;--muted:#9AA0AA;
+  --p:#0064B1;--p50:#E6F0F8;--p600:#00518F;--p700:#003A66;
+  --ac:#EF7025;--ac50:#FDEEE3;--ac700:#9E460F;
+  --gr:#21B14B;--gr50:#E7F6EC;--gr700:#18913C;
+  --wn:#E59324;--wnbg:#FEF3C7;--wntx:#B45309;
+  --er:#E0312B;--erbg:#FEE2E2;--ertx:#B91C1C;
+  --bartot:#E6F0F8;
+  --sh:0 1px 2px rgba(12,14,18,.06);--sh2:0 8px 24px rgba(12,14,18,.08);
+}
+[data-theme="dark"]{
+  --bg:#0F1115;--surface:#1A1D24;--surface2:#15181E;--border:#2A2E37;--line:#23262E;
+  --text:#F3F5F7;--sub:#9097A1;--muted:#6E747E;
+  --p:#4DA6E8;--p50:rgba(77,166,232,.16);--p600:#6FB8EF;--p700:#8FCBF2;
+  --ac:#F2884B;--ac50:rgba(242,136,75,.16);--ac700:#F2884B;
+  --gr:#37C66E;--gr50:rgba(55,198,110,.16);--gr700:#37C66E;
+  --wn:#E8A24C;--wnbg:rgba(232,162,76,.16);--wntx:#E8A24C;
+  --er:#F26A60;--erbg:rgba(242,106,96,.16);--ertx:#F26A60;
+  --bartot:rgba(77,166,232,.14);
+  --sh:0 1px 2px rgba(0,0,0,.3);--sh2:0 10px 30px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.side{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px}
+.brand .logo{font-weight:800;font-size:17px;letter-spacing:-.01em}
+.brand .logo .f{color:#EF7025}.brand .logo .p{color:#21B14B}.brand .logo .t{color:#0064B1}
+.nav{display:flex;align-items:center;gap:11px;padding:10px 11px;border-radius:10px;font-size:13.5px;font-weight:500;color:var(--sub);cursor:pointer;margin-bottom:2px}
+.nav i{font-size:19px}
+.nav:hover{background:var(--surface2);color:var(--text)}
+.nav.active{background:var(--p50);color:var(--p600);font-weight:600}
+.nav .chev{margin-left:auto;font-size:15px;opacity:.6}
+.subnav{margin:2px 0 4px 16px;padding-left:10px;border-left:1px solid var(--border)}
+.subnav .nav{font-size:13px;padding:8px 11px}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px 2px;border-top:1px solid var(--border)}
+.side-foot .ff{width:30px;height:30px;border-radius:8px;background:#EF7025;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:800;flex-shrink:0}
+.side-foot .ft{font-size:11px;line-height:1.35}.side-foot .ft b{font-size:12px}.side-foot .ft span{color:var(--sub)}
+.main{display:flex;flex-direction:column;min-width:0}
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;gap:14px;padding:0 22px}
+.search{flex:1;max-width:560px;height:40px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;display:flex;align-items:center;gap:9px;padding:0 14px;color:var(--muted);font-size:14px}
+.search .kbd{margin-left:auto;font-size:11px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:2px 6px;color:var(--sub)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--sub);background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:6px 11px;white-space:nowrap}
+.pill b{color:var(--text)}
+.pill i{font-size:14px}.pill.suc i{color:var(--gr)}.pill.acc i{color:var(--ac)}
+.orgsel{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;border:1px solid var(--border);border-radius:10px;padding:8px 12px;cursor:pointer}
+.orgsel .dot{width:8px;height:8px;border-radius:50%;background:var(--gr)}
+.iconbtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);display:grid;place-items:center;color:var(--sub);cursor:pointer;font-size:18px}
+.iconbtn:hover{background:var(--surface2);color:var(--text)}
+.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#0064B1,#EF7025);display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0}
+.content{padding:22px 26px 60px;max-width:1320px;width:100%}
+.h1{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--sub);font-size:14px;margin-top:5px}
+.tabs{display:flex;gap:8px;margin:20px 0 16px;flex-wrap:wrap}
+.tab{font-family:inherit;font-size:14px;font-weight:600;color:var(--sub);background:transparent;border:1px solid transparent;border-radius:11px;padding:9px 16px;cursor:pointer}
+.tab:hover{background:var(--surface2);color:var(--text)}
+.tab.active{background:var(--surface);border-color:var(--border);color:var(--text);box-shadow:var(--sh)}
+.tab.khan.active{background:var(--er);border-color:var(--er);color:#fff}
+.tab .dotr{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--er);margin-right:7px;vertical-align:1px}
+.tab.khan.active .dotr{background:#fff}
+.panel{display:none;animation:fade .25s ease}
+.panel.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.chip{font-size:13px;font-weight:500;color:var(--sub);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:7px 13px;cursor:pointer}
+.chip.on{background:var(--surface);border-color:var(--text);color:var(--text);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}
+.kpis.k4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px}
+.kpi .lbl{font-size:12.5px;color:var(--sub);font-weight:500}
+.kpi .n{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:8px 0 2px}
+.kpi .n .u{font-size:15px;color:var(--sub);font-weight:600}
+.kpi .meta{font-size:12px;color:var(--sub)}
+.eyebrow{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.eyebrow .bar{width:4px;height:18px;border-radius:2px;background:linear-gradient(180deg,#0064B1,#21B14B)}
+.eyebrow h3{font-size:16px;font-weight:700}
+.datebadge{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--p700);background:var(--p50);border-radius:8px;padding:5px 12px}
+.datepick-wrap{display:inline-flex;align-items:center;gap:7px;cursor:pointer}
+.datepick-wrap i{font-size:15px;color:var(--sub)}
+.datepick-wrap input{border:0;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--text);width:90px;cursor:pointer;outline:none;padding:0}
+.flatpickr-day.selected,.flatpickr-day.selected:hover{background:#0064B1;border-color:#0064B1}
+.flatpickr-day.today{border-color:#0064B1}
+.flatpickr-day.today:hover{background:#0064B1;color:#fff}
+[data-theme="dark"] .flatpickr-calendar{background:#1A1D24;color:#F3F5F7;box-shadow:0 8px 24px rgba(0,0,0,.5);border:1px solid #2A2E37}
+[data-theme="dark"] .flatpickr-calendar.arrowTop:before,[data-theme="dark"] .flatpickr-calendar.arrowTop:after{border-bottom-color:#1A1D24}
+[data-theme="dark"] .flatpickr-months .flatpickr-month,[data-theme="dark"] .flatpickr-current-month input.cur-year,[data-theme="dark"] .flatpickr-weekday,[data-theme="dark"] span.flatpickr-weekday{color:#F3F5F7;fill:#F3F5F7}
+[data-theme="dark"] .flatpickr-months .flatpickr-prev-month svg,[data-theme="dark"] .flatpickr-months .flatpickr-next-month svg{fill:#F3F5F7}
+[data-theme="dark"] .flatpickr-day{color:#E6E8EB}
+[data-theme="dark"] .flatpickr-day:hover{background:#2A2E37}
+[data-theme="dark"] .flatpickr-day.flatpickr-disabled,[data-theme="dark"] .flatpickr-day.prevMonthDay,[data-theme="dark"] .flatpickr-day.nextMonthDay{color:#5A5F68}
+[data-theme="dark"] .flatpickr-day.selected{color:#fff}
+.flatpickr-months .flatpickr-month{height:auto}
+.flatpickr-current-month{position:static;width:auto;left:auto;height:auto;padding:8px 0;display:flex;align-items:center;justify-content:center;gap:7px}
+.flatpickr-current-month .flatpickr-monthDropdown-months{width:auto;margin:0;padding:3px 6px;font-weight:600;border-radius:6px}
+.flatpickr-current-month .fp-year-select{appearance:auto;-webkit-appearance:menulist;font-family:inherit;font-size:inherit;font-weight:600;border:0;background:transparent;color:var(--text);cursor:pointer;padding:3px 4px;border-radius:6px}
+[data-theme="dark"] .flatpickr-current-month .fp-year-select,[data-theme="dark"] .flatpickr-current-month .fp-year-select option{background:#1A1D24;color:#F3F5F7}
+.flatpickr-current-month .numInputWrapper{width:56px}
+.flatpickr-current-month .numInputWrapper input.cur-year{font-weight:600;color:var(--text)}
+[data-theme="dark"] .flatpickr-monthDropdown-months,[data-theme="dark"] .flatpickr-monthDropdown-months option{background:#1A1D24;color:#F3F5F7}
+.grid2{display:grid;grid-template-columns:1.7fr 1fr;gap:22px;align-items:start}
+.lhead{display:flex;gap:10px;padding:8px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line)}
+.lrow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:0}
+.lname{flex:1;min-width:0;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lcost{width:104px;text-align:right;font-size:12.5px;color:var(--sub);white-space:nowrap}
+.llead{width:38px;text-align:right;font-size:14px;font-weight:700;color:var(--p)}
+.lcpl{width:96px;text-align:right;font-size:12.5px;white-space:nowrap}
+.ltot{display:flex;gap:10px;padding:12px;margin-top:4px;background:var(--bartot);border-radius:11px;font-weight:800}
+.src{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 22px}
+.src div{display:flex;justify-content:space-between;font-size:13px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.src b{font-weight:700}
+.src .z{color:var(--muted)}
+.qstats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.qstat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center}
+.qstat .n{font-size:26px;font-weight:800}
+.qstat .l{font-size:12px;color:var(--sub);margin-top:3px}
+.strow{padding:10px 0;border-bottom:1px solid var(--line)}
+.strow:last-child{border-bottom:0}
+.stline{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;font-weight:600;gap:10px}
+.stline .num{font-size:14px;font-weight:700}
+.stby{font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.5}
+.note{display:flex;gap:10px;align-items:flex-start;background:var(--p50);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:12.5px;line-height:1.6;color:var(--text)}
+.note i{color:var(--p);font-size:18px;flex-shrink:0;margin-top:1px}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--sub);margin:4px 0 12px}
+.section-tag .s{font-size:11px;font-weight:700;color:#fff;background:var(--p);border-radius:6px;padding:2px 7px}
+.chartbox{height:200px;display:flex;align-items:flex-end;gap:10px;padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.chartbox .b{flex:1;border-radius:7px 7px 0 0;background:var(--p)}
+.chartbox .b.ac{background:var(--ac)}
+.placeholder{padding:48px;text-align:center;color:var(--sub);border:1px dashed var(--border);border-radius:16px}
+.placeholder i{font-size:34px;color:var(--muted)}
+@media(max-width:1080px){.app{grid-template-columns:1fr}.side{display:none}.kpis,.kpis.k4{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><span class="logo"><span class="f">F</span><span class="p">P</span><span class="t">T</span> SCHOOLS</span></div>
+    <div class="nav"><i class="ti ti-layout-dashboard"></i>Tổng quan</div>
+    <div class="nav"><i class="ti ti-chart-line"></i>Phân tích<i class="ti ti-chevron-right chev"></i></div>
+    <div class="nav active"><i class="ti ti-speakerphone"></i>Marketing<i class="ti ti-chevron-down chev"></i></div>
+    <div class="subnav"><div class="nav active"><i class="ti ti-building-bank"></i>Báo cáo FSC HO</div></div>
+    <div class="nav"><i class="ti ti-database"></i>Dữ liệu<i class="ti ti-chevron-right chev"></i></div>
+    <div class="nav"><i class="ti ti-sparkles"></i>AI phân tích</div>
+    <div class="nav"><i class="ti ti-refresh"></i>Tự động hoá<i class="ti ti-chevron-right chev"></i></div>
+    <div class="nav"><i class="ti ti-cloud"></i>CDP Insider<i class="ti ti-chevron-right chev"></i></div>
+    <div class="nav"><i class="ti ti-settings"></i>Cài đặt<i class="ti ti-chevron-right chev"></i></div>
+    <div class="side-foot"><div class="ff">FPT</div><div class="ft"><b>FPT SCHOOLS</b><br><span>Vận hành bởi Phòng Digital Marketing HO</span></div></div>
+  </aside>
+
+  <div class="main">
+    <div class="top">
+      <div class="search"><i class="ti ti-search"></i>Tìm kiếm dashboard...<span class="kbd">⌘K</span></div>
+      <span class="pill suc"><i class="ti ti-bolt"></i>Load <b>1.2s</b></span>
+      <span class="pill"><i class="ti ti-database"></i>Data <b>529ms</b></span>
+      <span class="pill acc"><i class="ti ti-plug"></i>Nguồn <b>4/5</b></span>
+      <span class="pill"><i class="ti ti-clock"></i>36p trước</span>
+      <span class="orgsel"><span class="dot"></span>FPT SCHOOLS <i class="ti ti-chevron-down"></i></span>
+      <button class="iconbtn" id="themeBtn" title="Đổi sáng/tối"><i class="ti ti-moon"></i></button>
+      <span class="av">LĐ</span>
+    </div>
+
+    <div class="content">
+      <div class="h1">Báo cáo khẩn cấp</div>
+      <div class="sub">Lead HO mang về cho các cơ sở · KPI target + % đạt · báo cáo khẩn hằng ngày</div>
+
+      <div class="tabs">
+        <button class="tab" data-tab="mkt">Báo cáo Marketing</button>
+        <button class="tab" data-tab="cvt">Chuyển đổi 25-26 ↔ 26-27</button>
+        <button class="tab khan active" data-tab="khan"><span class="dotr"></span>Báo cáo khẩn</button>
+      </div>
+
+      <!-- TAB: Báo cáo Marketing -->
+      <div class="panel" id="mkt">
+        <div class="filters">
+          <span class="chip on">Toàn cohort</span><span class="chip">Hôm nay</span><span class="chip">Hôm qua</span>
+          <span class="chip">7 ngày</span><span class="chip">30 ngày</span><span class="chip">Tháng này</span><span class="chip">Năm nay</span>
+          <span class="chip">Tuỳ chọn</span><span class="chip">+ So KH 2025</span><span class="chip">Cohort KH 2026 ▾</span>
+        </div>
+        <div class="section-tag"><span class="s">SECTION 1</span> MySQL — Lead funnel HO · KH 2026</div>
+        <div class="kpis">
+          <div class="card kpi"><div class="lbl">LEAD HO</div><div class="num n">16.085</div></div>
+          <div class="card kpi"><div class="lbl">REG</div><div class="num n">2.527</div><div class="meta">15,7% Lead→REG</div></div>
+          <div class="card kpi"><div class="lbl">NB</div><div class="num n">1.064</div><div class="meta">42,1% REG→NB</div></div>
+          <div class="card kpi"><div class="lbl">NE</div><div class="num n">873</div><div class="meta">82% NB→NE</div></div>
+          <div class="card kpi"><div class="lbl">DROP NE</div><div class="num n">1</div></div>
+        </div>
+        <div class="eyebrow"><span class="bar"></span><h3>Xu hướng theo tháng</h3></div>
+        <div class="chartbox">
+          <div class="b" style="height:42%"></div><div class="b" style="height:58%"></div><div class="b" style="height:50%"></div>
+          <div class="b" style="height:73%"></div><div class="b" style="height:64%"></div><div class="b ac" style="height:90%"></div>
+          <div class="b" style="height:78%"></div><div class="b" style="height:85%"></div>
+        </div>
+      </div>
+
+      <!-- TAB: Chuyển đổi -->
+      <div class="panel" id="cvt">
+        <div class="placeholder"><i class="ti ti-arrows-exchange"></i><p style="margin-top:12px">So sánh chuyển đổi NH 2025-2026 ↔ 2026-2027 — khu vực dashboard hiện có của bạn.</p></div>
+      </div>
+
+      <!-- TAB: BÁO CÁO KHẨN -->
+      <div class="panel show" id="khan">
+        <div class="filters">
+          <span class="chip on" style="border-color:var(--er);color:var(--ertx)"><i class="ti ti-alert-triangle" style="vertical-align:-2px"></i> Báo cáo khẩn</span>
+          <span class="chip datepick-wrap"><i class="ti ti-calendar"></i><input id="datepick" value="21/05/2026" readonly /></span>
+          <span id="filterDates" style="font-size:12.5px;color:var(--sub);margin-left:auto">Cập nhật 21:00 · Lead hôm nay 21/05 · Chất lượng hôm qua 20/05</span>
+        </div>
+
+        <div class="kpis k4">
+          <div class="card kpi"><div class="lbl">Tổng lead</div><div class="num n" style="color:var(--p)">103</div></div>
+          <div class="card kpi"><div class="lbl">Chi tiêu FB</div><div class="num n" style="font-size:22px">24.770.574<span class="u"> đ</span></div></div>
+          <div class="card kpi"><div class="lbl">Chi tiêu GG</div><div class="num n" style="font-size:22px">753.112<span class="u"> đ</span></div></div>
+          <div class="card kpi"><div class="lbl">CPL trung bình</div><div class="num n" style="font-size:22px">240.491<span class="u"> đ</span></div></div>
+        </div>
+
+        <div class="grid2">
+          <!-- LEFT -->
+          <div>
+            <div class="eyebrow"><span class="bar"></span><h3>Lead &amp; chi phí theo cơ sở</h3><span class="datebadge" id="leadDate">Hôm nay · 21/05/2026</span></div>
+            <div class="card" style="padding:6px 6px 8px">
+              <div class="lhead"><span style="flex:1">Cơ sở</span><span style="width:104px;text-align:right">Chi phí Ads FB</span><span style="width:38px;text-align:right">Lead</span><span style="width:96px;text-align:right">CPL</span></div>
+              <div class="lrow"><span class="lname">Hòa Lạc</span><span class="lcost num">1.895.459đ</span><span class="llead num">8</span><span class="lcpl num">236.932đ</span></div>
+              <div class="lrow"><span class="lname">Tây Hà Nội</span><span class="lcost num">1.675.233đ</span><span class="llead num">5</span><span class="lcpl num">335.047đ</span></div>
+              <div class="lrow"><span class="lname">Cầu Giấy</span><span class="lcost num">3.361.315đ</span><span class="llead num">26</span><span class="lcpl num">129.281đ</span></div>
+              <div class="lrow"><span class="lname">Bắc Ninh</span><span class="lcost num">474.531đ</span><span class="llead num">4</span><span class="lcpl num">118.633đ</span></div>
+              <div class="lrow"><span class="lname">Bắc Giang</span><span class="lcost num">1.036.491đ</span><span class="llead num">3</span><span class="lcpl num">345.497đ</span></div>
+              <div class="lrow"><span class="lname">Hải Phòng</span><span class="lcost num">462.468đ</span><span class="llead num">16</span><span class="lcpl num">28.904đ</span></div>
+              <div class="lrow"><span class="lname">Hà Nam</span><span class="lcost num">1.520.763đ</span><span class="llead num">4</span><span class="lcpl num">380.191đ</span></div>
+              <div class="lrow"><span class="lname">Thanh Hóa</span><span class="lcost num">400.930đ</span><span class="llead num">2</span><span class="lcpl num">200.465đ</span></div>
+              <div class="lrow"><span class="lname">Vinh</span><span class="lcost num">852.864đ</span><span class="llead num">6</span><span class="lcpl num">142.144đ</span></div>
+              <div class="lrow"><span class="lname">Huế</span><span class="lcost num">1.522.800đ</span><span class="llead num">1</span><span class="lcpl num">1.522.800đ</span></div>
+              <!-- Đà Nẵng: 2 dòng, gộp ô chi phí + CPL -->
+              <div style="display:grid;grid-template-columns:1fr 104px 38px 96px;column-gap:10px;padding:0 12px;border-bottom:1px solid var(--line)">
+                <span style="grid-row:1;padding:10px 0 6px;font-size:13.5px;border-bottom:1px solid var(--line)">Đà Nẵng 1,2</span>
+                <span class="num" style="grid-row:1 / span 2;grid-column:2;align-self:center;text-align:right;font-size:12.5px;color:var(--sub)">4.231.187đ</span>
+                <span class="num" style="grid-row:1;grid-column:3;padding:10px 0 6px;text-align:right;font-size:14px;font-weight:700;color:var(--p);border-bottom:1px solid var(--line)">7</span>
+                <span class="num" style="grid-row:1 / span 2;grid-column:4;align-self:center;text-align:right;font-size:12.5px">470.132đ</span>
+                <span style="grid-row:2;grid-column:1;padding:6px 0 10px;font-size:13.5px">Đà Nẵng 3</span>
+                <span class="num" style="grid-row:2;grid-column:3;padding:6px 0 10px;text-align:right;font-size:14px;font-weight:700;color:var(--p)">2</span>
+              </div>
+              <div class="lrow"><span class="lname">Quy Nhơn 3</span><span class="lcost num">433.366đ</span><span class="llead num">1</span><span class="lcpl num">433.366đ</span></div>
+              <div class="lrow"><span class="lname">Long Vân</span><span class="lcost num">3.029.916đ</span><span class="llead num">8</span><span class="lcpl num">378.740đ</span></div>
+              <div class="lrow"><span class="lname">Long An</span><span class="lcost num">728.948đ</span><span class="llead num">4</span><span class="lcpl num">182.237đ</span></div>
+              <div class="lrow"><span class="lname">Cần Thơ</span><span class="lcost num">2.025.097đ</span><span class="llead num">2</span><span class="lcpl num">1.012.549đ</span></div>
+              <div class="lrow"><span class="lname">Hậu Giang</span><span class="lcost num">769.872đ</span><span class="llead num">2</span><span class="lcpl num">384.936đ</span></div>
+              <div class="lrow"><span class="lname">Sóc Trăng</span><span class="lcost num">349.334đ</span><span class="llead num">2</span><span class="lcpl num">174.667đ</span></div>
+              <div class="ltot"><span style="flex:1;color:var(--p700)">TỔNG</span><span class="num" style="width:104px;text-align:right;color:var(--p700)">24.770.574đ</span><span class="num" style="width:38px;text-align:right;color:var(--p700)">103</span><span class="num" style="width:96px;text-align:right;color:var(--p700)">240.491đ</span></div>
+            </div>
+
+            <div class="eyebrow" style="margin-top:20px"><span class="bar"></span><h3>Nguồn lead</h3></div>
+            <div class="card">
+              <div class="src">
+                <div><span>HO.FB</span><b>85</b></div>
+                <div><span>HO.CDP</span><b>6</b></div>
+                <div><span>HO.Website</span><b>6</b></div>
+                <div><span>HO.Zalo</span><b>5</b></div>
+                <div><span>HO.Google</span><b>2</b></div>
+                <div><span>HO.Tiktok</span><b class="z">0</b></div>
+                <div style="border-bottom:0"><span>HO.SEO</span><b class="z">0</b></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT -->
+          <div>
+            <div class="eyebrow"><span class="bar"></span><h3>Chất lượng lead</h3><span class="datebadge" id="qualDate">Hôm qua · 20/05/2026</span></div>
+            <div class="qstats">
+              <div class="qstat"><div class="num n">65</div><div class="l">Tổng lead</div></div>
+              <div class="qstat"><div class="num n" style="color:var(--gr700)">26</div><div class="l">Đã nghe máy</div></div>
+              <div class="qstat" style="border-color:var(--er)"><div class="num n" style="color:var(--ertx)">25</div><div class="l">Chưa liên hệ được</div></div>
+            </div>
+
+            <div class="eyebrow" style="margin-top:14px"><span class="bar"></span><h3>Trạng thái · số lượng · thuộc cơ sở</h3></div>
+            <div class="card" style="padding:4px 16px">
+              <div class="strow"><div class="stline"><span>QT / TN</span><span class="num">3</span></div><div class="stby">Hòa Lạc 1 · cơ sở khác 2</div></div>
+              <div class="strow"><div class="stline"><span>Suy nghĩ thêm</span><span class="num">19</span></div><div class="stby">Hòa Lạc 5 · Quy Nhơn 3 · Đà Nẵng 1,2: 2 · Cầu Giấy 1 · Tây Hà Nội 1 · Long An 1 · Cần Thơ 1 · khác 5</div></div>
+              <div class="strow"><div class="stline"><span>KQT / KPH</span><span class="num">9</span></div><div class="stby">Cầu Giấy 1 · Đà Nẵng 3: 1 · Long An 1 · khác 6</div></div>
+              <div class="strow"><div class="stline"><span>Sai đối tượng</span><span class="num" style="color:var(--ertx)">8</span></div><div class="stby">Cầu Giấy 4 · Đà Nẵng 3: 2 · Cần Thơ 1 · khác 1</div></div>
+              <div class="strow"><div class="stline"><span>Không có trạng thái</span><span class="num">26</span></div><div class="stby">Lead chưa gắn mức độ quan tâm</div></div>
+            </div>
+
+            <div class="note"><i class="ti ti-info-circle"></i><div><b>Chưa liên hệ được</b> = chưa liên hệ + chưa nghe máy lần 1/2/3 + thuê bao + sai số + máy bận. &nbsp;<b>QT</b> quan tâm · <b>TN</b> tiềm năng · <b>KQT</b> không quan tâm · <b>KPH</b> không phù hợp · <b>SĐT</b> sai đối tượng.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vn.js"></script>
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab');
+  var panels = { mkt:document.getElementById('mkt'), cvt:document.getElementById('cvt'), khan:document.getElementById('khan') };
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      Object.keys(panels).forEach(function(k){ panels[k].classList.remove('show'); });
+      panels[t.dataset.tab].classList.add('show');
+    });
+  });
+  var btn = document.getElementById('themeBtn');
+  btn.addEventListener('click', function(){
+    var root = document.documentElement;
+    var dark = root.getAttribute('data-theme') === 'dark';
+    root.setAttribute('data-theme', dark ? 'light' : 'dark');
+    btn.innerHTML = dark ? '<i class="ti ti-moon"></i>' : '<i class="ti ti-sun"></i>';
+  });
+
+  if (window.flatpickr) {
+    var pad = function(n){ return String(n).padStart(2,'0'); };
+    var fmt = function(d){ return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear(); };
+    var buildYears = function(fp){
+      if (fp._yearSel) return;
+      var wrap = fp.currentYearElement && fp.currentYearElement.closest('.numInputWrapper');
+      if (!wrap) return;
+      var sel = document.createElement('select');
+      sel.className = 'fp-year-select';
+      for (var y = 2023; y <= 2031; y++) sel.add(new Option(y, y, false, y === fp.currentYear));
+      sel.addEventListener('change', function(){ fp.jumpToDate(new Date(parseInt(this.value, 10), fp.currentMonth, 1)); });
+      wrap.style.display = 'none';
+      wrap.parentNode.appendChild(sel);
+      fp._yearSel = sel;
+    };
+    flatpickr('#datepick', {
+      dateFormat: 'd/m/Y',
+      locale: (flatpickr.l10ns && flatpickr.l10ns.vn) || 'default',
+      disableMobile: true,
+      monthSelectorType: 'dropdown',
+      onReady: function(s, str, fp){ buildYears(fp); },
+      onYearChange: function(s, str, fp){ if (fp._yearSel) fp._yearSel.value = fp.currentYear; },
+      onChange: function(sel){
+        if(!sel[0]) return;
+        var d = sel[0], y = new Date(d.getTime() - 86400000);
+        var td = fmt(d), yd = fmt(y);
+        document.getElementById('leadDate').textContent = 'Hôm nay · ' + td;
+        document.getElementById('qualDate').textContent = 'Hôm qua · ' + yd;
+        document.getElementById('filterDates').textContent = 'Cập nhật 21:00 · Lead hôm nay ' + td.slice(0,5) + ' · Chất lượng hôm qua ' + yd.slice(0,5);
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
